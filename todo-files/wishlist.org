@@ -1,0 +1,89 @@
+
+* What a good MBO implementation should bring
+- modular model
+  - for performance, skalarized or not
+  - for other things, e.g. time
+  - prob of failure
+- modular infill crit
+  - access pre- and post-trafo points
+    - one trafo before, one after access
+  - access eval time
+  - multiple crits
+- multicrit stuff
+  - skalarise, then model & suggest
+  - model, then skalarise and suggest
+  - model, suggest directly
+- modular infill opt
+  - lambda variation
+  - constant liar
+  - skalarisation variation
+- 'restricted' mbo: model contains more parameters than are being optimized
+- archive transferable
+- objective function: easy: input (w space), output
+  - should be easy to encapsulate
+- continueable
+- imputation:
+  - user given
+  - model given (maybe doesn't make sense)
+  - model probability of failure
+
+* design ideas
+- some function to suggest points: archive input, possibly with some points blank, suggested point(s) output
+- archive may contain more columns than the search space of the function provides
+- let's not kid ourselves, this is going to be written with paradox & co
+- we won't get around using R6 for political reasons, but stuff can be converted to proper code later
+
+** Function suggest():
+  - current archive: data.frame with NAs for points that were suggested before and are under evaluation
+    - parameters that the function can take
+    - parameters that are also being modeled
+    - outcomes
+    - other things that may be interesting (e.g. runtime)
+      - maybe this can just as well go under 'outcome'
+  - function under evaluation info:
+    - search space
+    - output types
+      - # objectives
+      - direction
+      - nadir?
+    - types of other info being modeled
+
+*** What is this function doing?
+- loop (e.g. with different skalarizing params) for each pt to suggest
+- doing /something/ to the outcome columns (e.g. skalarizing)
+- fit model to each remaining outcome
+- infill opt loop
+  - do /something/ to the predictions of the models (e.g. skalarizing)
+
+
+* TO DO
+ - fast vs. slow param changes
+
+
+* specs
+** Function suggest():
+ - knows:
+   - sampling space, trafo, trafo codomain
+   - data.frame of config points and outcomes
+     - some of the config points are not hit by the trafo codomain / sampling
+     - outcomes could be objective criteria, constraint (Y / N), run time
+     - sample weights
+ - does:
+   - scalarize pre-model
+   - fit model(s)
+   - opt loop:
+     - scalarize post-model
+     - infill crit
+       - infill crit takes (skalarized) model outputs
+	 - how do we do snoek-style multifidelity? need conditional models for different fidelity steps (TODO)
+ - returns:
+   - suggested points
+   - models (e.g. for multifidelity in MBO() loop)
+** Configuration
+ - default configurations for well-known mbo variants
+ - can adjust single points of these to adjust e.g. learner, single/multicrit, etc.
+** MBO()
+ - does the suggest() loop
+ - may also do smart things, e.g. encumbent eval, multifidelity
+** Ideas
+ - shiny app for human-in-the-loop

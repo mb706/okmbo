@@ -1,0 +1,16 @@
+Package: okmbo
+Title: An Ok MBO Implementation
+Description: Doing MBO ok.
+Authors@R: c(
+    person("Martin", "Binder", email = "developer.mb706@doublecaret.com", role = c("aut", "cre"))
+URL: https://github.com/mb706/okmbo
+BugReports: https://github.com/mb706/okmbo/issues
+License: AGPL
+Encoding: UTF-8
+Roxygen: list(wrap = FALSE)
+Depends:
+    R (>= 3.0.2)
+LazyData: yes
+ByteCompile: yes
+Version: 0.3.4-2
+VignetteBuilder: knitr
