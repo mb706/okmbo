@@ -30,8 +30,6 @@
 * design ideas
 - some function to suggest points: archive input, possibly with some points blank, suggested point(s) output
 - archive may contain more columns than the search space of the function provides
-- let's not kid ourselves, this is going to be written with paradox & co
-- we won't get around using R6 for political reasons, but stuff can be converted to proper code later
 
 ** Function suggest():
   - current archive: data.frame with NAs for points that were suggested before and are under evaluation
@@ -58,7 +56,9 @@
 
 * TO DO
  - fast vs. slow param changes
-
+ - acq fun opt should remember past results?
+ - path dependent costs
+ - multiobjective, some of them cheap
 
 * specs
 ** Function suggest():
@@ -87,3 +87,6 @@
  - may also do smart things, e.g. encumbent eval, multifidelity
 ** Ideas
  - shiny app for human-in-the-loop
+
+
+
